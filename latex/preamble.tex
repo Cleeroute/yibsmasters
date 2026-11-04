@@ -1,0 +1,161 @@
+\documentclass[11pt,a4paper,oneside]{report}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[sc]{mathpazo}
+\usepackage[scaled=0.92]{helvet}
+\linespread{1.06}
+\usepackage[a4paper,top=2.6cm,bottom=2.4cm,left=2.4cm,right=2.4cm,headheight=15pt]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath,amssymb}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{booktabs,tabularx,array,multirow,longtable}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{titlesec}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,calc,fit,backgrounds,decorations.pathreplacing}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{caption}
+\usepackage{float}
+\usepackage{needspace}
+\usepackage[hidelinks]{hyperref}
+\usepackage{bookmark}
+
+% ------------------------------------------------------------------ colours (sampled from the 1st edition)
+\definecolor{navy}{HTML}{14325C}
+\definecolor{teal}{HTML}{0F7C84}
+\definecolor{orange}{HTML}{D9731A}
+\definecolor{brick}{HTML}{B3322F}
+\definecolor{green}{HTML}{2E7D4F}
+\definecolor{slate}{HTML}{5F6B7A}
+\definecolor{defbg}{HTML}{EEF3F8}
+\definecolor{greenbg}{HTML}{E9F5EE}
+\definecolor{redbg}{HTML}{FBEAE9}
+\definecolor{labbg}{HTML}{FDF1E5}
+\definecolor{tealbg}{HTML}{E7F3F4}
+\definecolor{codebg}{HTML}{F3F7FA}
+\definecolor{outbg}{HTML}{F2F2F2}
+\definecolor{codeframe}{HTML}{ADB7C6}
+\definecolor{weekbg}{HTML}{F1F4F7}
+
+\hypersetup{pdftitle={Business Process Analytics -- Lecture Notes (2nd edition)},
+  pdfauthor={FOLEFAC Martins},
+  pdfsubject={MTech 2 Data Science and AI, Yaounde Institute of Business Studies},
+  pdfkeywords={business process analytics, process mining, forecasting, inventory, optimisation, simulation, causal inference}}
+
+% ------------------------------------------------------------------ headings
+\newcommand{\sffamilybold}{\sffamily\bfseries}
+\titleformat{\section}{\sffamilybold\Large\color{navy}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\sffamilybold\large\color{teal}}{\thesubsection}{0.7em}{}
+\titleformat{\subsubsection}{\sffamilybold\normalsize\color{navy}}{}{0em}{}
+\titleformat{\paragraph}[runin]{\sffamilybold\normalsize\color{navy}}{}{0em}{}[.]
+\titlespacing*{\section}{0pt}{3.0ex plus 1ex minus .2ex}{1.4ex}
+\titlespacing*{\subsection}{0pt}{2.4ex plus 1ex minus .2ex}{1.0ex}
+\titlespacing*{\paragraph}{0pt}{1.4ex plus .5ex}{0.6em}
+\setcounter{secnumdepth}{2}
+\setcounter{tocdepth}{2}
+
+\newcommand{\chaplabel}{WEEK}
+\titleformat{\chapter}[display]
+  {\sffamilybold\color{navy}}
+  {\begin{tikzpicture}[baseline]
+     \node[fill=navy,text=white,font=\sffamily\bfseries\small,inner xsep=9pt,inner ysep=5pt,anchor=west] (L) at (0,0) {\chaplabel\ \thechapter};
+     \draw[teal,line width=1.4pt] (L.east) -- (\linewidth,0);
+   \end{tikzpicture}}
+  {14pt}{\fontsize{24}{29}\selectfont\raggedright}
+\titleformat{name=\chapter,numberless}[display]
+  {\sffamilybold\color{navy}}{}{0pt}{\fontsize{24}{29}\selectfont\raggedright}
+\titlespacing*{\chapter}{0pt}{-10pt}{22pt}
+
+% ------------------------------------------------------------------ header / footer
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\chaptermark}[1]{\markboth{\ifnum\value{chapter}>0 \chaplabel\ \thechapter: \fi #1}{}}
+\fancyhead[L]{\sffamily\small\color{slate}Business Process Analytics}
+\fancyhead[R]{\sffamily\small\color{slate}\nouppercase{\leftmark}}
+\fancyfoot[L]{\sffamily\footnotesize\color{slate}YIBS $\cdot$ MTech 2 Data Science \& AI}
+\fancyfoot[C]{\sffamily\small\bfseries\thepage}
+\fancyfoot[R]{\sffamily\footnotesize\color{slate}FOLEFAC Martins}
+\renewcommand{\headrule}{\color{teal}\hrule height 0.6pt}
+\renewcommand{\footrulewidth}{0pt}
+\fancypagestyle{plain}{\fancyhf{}%
+  \fancyfoot[L]{\sffamily\footnotesize\color{slate}YIBS $\cdot$ MTech 2 Data Science \& AI}%
+  \fancyfoot[C]{\sffamily\small\bfseries\thepage}%
+  \fancyfoot[R]{\sffamily\footnotesize\color{slate}FOLEFAC Martins}%
+  \renewcommand{\headrulewidth}{0pt}}
+
+% ------------------------------------------------------------------ boxes
+\tcbset{bobase/.style={enhanced,breakable,boxrule=0.5pt,arc=2pt,left=7pt,right=7pt,top=7pt,bottom=5pt,
+  fonttitle=\sffamily\bfseries\small,attach boxed title to top left={xshift=8pt,yshift=-8.5pt},
+  boxed title style={boxrule=0pt,arc=0pt,left=5pt,right=5pt,top=2pt,bottom=2pt},
+  before skip=13pt,after skip=11pt}}
+\newtcolorbox{definition}[1]{bobase,colback=defbg,colframe=navy!45,coltitle=white,
+  boxed title style={colback=navy},title={Definition --- #1}}
+\newtcolorbox{keyformula}[1]{bobase,colback=tealbg,colframe=teal!55,coltitle=white,
+  boxed title style={colback=teal},title={Key formula --- #1}}
+\newtcolorbox{example}[1]{bobase,colback=greenbg,colframe=green!45,coltitle=white,
+  boxed title style={colback=green},title={Worked example \theexcounter\ --- #1}}
+\newcounter{excounter}[chapter]
+\renewcommand{\theexcounter}{\thechapter.\arabic{excounter}}
+\let\oldexample\example
+\renewcommand{\example}[1]{\refstepcounter{excounter}\oldexample{#1}}
+\newtcolorbox{pitfall}[1]{bobase,colback=redbg,colframe=brick!45,coltitle=white,
+  boxed title style={colback=brick},title={Common pitfall --- #1}}
+\newtcolorbox{labbox}[1]{bobase,colback=labbg,colframe=orange!55,coltitle=white,
+  boxed title style={colback=orange},title={#1}}
+\newtcolorbox{insight}[1]{bobase,colback=tealbg,colframe=teal!55,coltitle=white,
+  boxed title style={colback=teal},title={#1}}
+\newtcolorbox{realcase}[1]{bobase,colback=white,colframe=navy!60,coltitle=white,
+  boxed title style={colback=navy!85},title={In practice --- #1}}
+\newtcolorbox{weekbox}{enhanced,breakable,colback=weekbg,colframe=weekbg,boxrule=0pt,arc=0pt,
+  borderline west={3pt}{0pt}{navy},left=10pt,right=8pt,top=6pt,bottom=6pt,fontupper=\sffamily\small,
+  before skip=6pt,after skip=12pt}
+\newtcolorbox{plainnote}{enhanced,colback=labbg,colframe=orange!50,boxrule=0.5pt,arc=2pt,
+  fontupper=\sffamily\small,left=8pt,right=8pt}
+
+% ------------------------------------------------------------------ code listings
+\lstdefinestyle{py}{language=Python,basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{navy}\bfseries,commentstyle=\color{teal}\itshape,stringstyle=\color{brick},
+  numbers=left,numberstyle=\tiny\color{slate},numbersep=6pt,xleftmargin=16pt,framexleftmargin=16pt,
+  backgroundcolor=\color{codebg},frame=single,rulecolor=\color{codeframe},framerule=0.4pt,
+  breaklines=true,breakatwhitespace=false,postbreak=\mbox{\textcolor{slate}{$\hookrightarrow$}\space},
+  columns=fullflexible,keepspaces=true,showstringspaces=false,upquote=true,
+  aboveskip=8pt,belowskip=4pt,tabsize=4,
+  literate={±}{{$\pm$}}1 {é}{{\'e}}1 {è}{{\`e}}1 {–}{{--}}1 {—}{{---}}1 {…}{{...}}1}
+\lstdefinestyle{out}{basicstyle=\ttfamily\scriptsize,backgroundcolor=\color{outbg},frame=none,
+  breaklines=true,columns=fullflexible,keepspaces=true,showstringspaces=false,
+  xleftmargin=16pt,aboveskip=3pt,belowskip=10pt,upquote=true,
+  literate={±}{{$\pm$}}1}
+\lstdefinestyle{sql}{style=py,language=SQL,morekeywords={WITH,FILTER,OVER,PARTITION,QUALIFY,ROWS,PRECEDING,date_trunc}}
+\lstdefinestyle{sh}{style=py,language=bash,numbers=none,xleftmargin=4pt,framexleftmargin=4pt}
+\renewcommand{\lstlistingname}{Listing}
+\DeclareCaptionFormat{yibs}{\small\sffamily\textbf{\color{navy}#1#2}#3}
+\captionsetup{format=yibs,labelsep=period,font={small},labelfont={bf,color=navy},justification=centering}
+\captionsetup[lstlisting]{format=yibs,labelsep=period,font={small},skip=4pt}
+\counterwithin{figure}{chapter}
+\counterwithin{table}{chapter}
+
+% one tested code chunk + its printed output
+\newcommand{\code}[2]{\lstinputlisting[style=py,caption={#2}]{../out/#1.py}}
+\newcommand{\outp}[1]{\lstinputlisting[style=out]{../out/#1.txt}}
+\newcommand{\codeout}[2]{\code{#1}{#2}\outp{#1}}
+
+% ------------------------------------------------------------------ misc
+\setlist{itemsep=2pt,topsep=4pt,leftmargin=*}
+\newcommand{\xaf}{\,XAF}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\so}[1]{\textit{So what:} #1}
+\newcommand{\interp}[1]{\par\smallskip\noindent\textit{Interpretation.} #1\par\medskip}
+\newcommand{\step}[1]{\Needspace{8\baselineskip}\subsubsection*{\color{teal}#1}}
+\renewcommand{\arraystretch}{1.18}
+\setlength{\parskip}{3pt}
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+
+% session timetable
+\newenvironment{timetable}{\begin{center}\small\sffamily\begin{tabular}{@{}L{2.0cm}L{2.1cm}L{9.6cm}@{}}\toprule
+\textbf{Time} & \textbf{Block} & \textbf{Content}\\\midrule}{\bottomrule\end{tabular}\end{center}}

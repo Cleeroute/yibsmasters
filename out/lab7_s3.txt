@@ -1,0 +1,5 @@
+naive difference      10.98
+regression adjustment  3.36  (95% CI 2.63 to 4.08)
+inverse-propensity     1.79   <- extreme weights, max w = 63
+doubly robust (AIPW)   3.29
+propensity range: trained 0.02-0.98, untrained 0.01-0.95

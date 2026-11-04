@@ -1,0 +1,9 @@
+column_name  column_type
+    Invoice      VARCHAR
+  StockCode      VARCHAR
+Description      VARCHAR
+   Quantity       BIGINT
+InvoiceDate TIMESTAMP_NS
+      Price       DOUBLE
+Customer ID       DOUBLE
+    Country      VARCHAR

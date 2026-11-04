@@ -1,0 +1,8 @@
+     forecast  plan_EV  plan_SAA  litres_SAA
+P01       620    538.0     484.0      3872.0
+P02       980    980.0     711.0       853.0
+P06       470    470.0     396.0       991.0
+P12      1150   1150.0     957.0       287.0
+storage used: EV 7,000 L, SAA 6,004 L of 7,000 L
+expected profit: EV plan 705 k XAF | SAA plan 772 k XAF | VSS = 67 k XAF
+perfect-information profit 1,117 k XAF -> EVPI = 346 k XAF

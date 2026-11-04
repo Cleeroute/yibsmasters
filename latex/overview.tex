@@ -1,0 +1,248 @@
+% ================================================================== COURSE OVERVIEW
+\chapter*{Course Overview}
+\addcontentsline{toc}{chapter}{Course Overview}
+\markboth{Course Overview}{}
+
+\section*{Course description}
+Business Process Analytics trains you to work as a \emph{process and operations analyst}: the person who turns process
+data into decisions about stock, staff, capacity, routes and processes, and who can show what those decisions are
+worth in francs. You already know how to fit models. This course is about everything around the model that
+decides whether it creates value: what decision it serves, what an error costs, which constraints bind, how
+uncertain the answer is, and whether the change actually worked.
+
+The course follows one thread. Each week's output is the next week's input, as it would be in a real analytics team.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[node distance=3mm,
+  stage/.style={draw=none,fill=#1,text=white,font=\sffamily\bfseries\footnotesize,minimum height=12mm,
+    text width=17mm,align=center,rounded corners=1.5pt},
+  lab/.style={font=\sffamily\scriptsize,text=slate,align=center,text width=19mm}]
+  \node[stage=navy] (w1) {W1\\Measure};
+  \node[stage=navy,right=of w1] (w2) {W2\\Diagnose};
+  \node[stage=teal,right=of w2] (w3) {W3\\Forecast};
+  \node[stage=teal,right=of w3] (w4) {W4\\Stock policy};
+  \node[stage=orange,right=of w4] (w5) {W5\\Optimise};
+  \node[stage=orange,right=of w5] (w6) {W6\\Capacity \& risk};
+  \node[stage=brick,right=of w6] (w7) {W7\\Did it work?};
+  \foreach \a/\b in {w1/w2,w2/w3,w3/w4,w4/w5,w5/w6,w6/w7} \draw[-{Latex[length=2mm]},slate,thick] (\a)--(\b);
+  \node[lab,below=2mm of w1] {clean data,\\KPIs, ABC--XYZ};
+  \node[lab,below=2mm of w2] {control charts,\\process maps, alerts};
+  \node[lab,below=2mm of w3] {point \& quantile\\forecasts, errors};
+  \node[lab,below=2mm of w4] {safety stock,\\newsvendor, bullwhip};
+  \node[lab,below=2mm of w5] {LP/MIP plans,\\shadow prices, routes};
+  \node[lab,below=2mm of w6] {staffing to SLA,\\simulation, VSS};
+  \node[lab,below=2mm of w7] {A/B, DiD,\\AI guardrails};
+  \draw[decorate,decoration={brace,amplitude=5pt,raise=3pt},teal,thick] (w3.north west)--(w6.north east)
+    node[midway,above=9pt,font=\sffamily\bfseries\footnotesize,text=teal]{predict-then-optimise: the forecast's errors set the decision's buffers};
+\end{tikzpicture}
+\caption{The decision thread. Colours mark the three questions: what is happening (navy), what will happen and what to do about it (teal, orange), and did it work (red).}
+\end{figure}
+
+\section*{Learning outcomes}
+By the end of the course a successful student can:
+\begin{enumerate}[label=\textbf{LO\arabic*.},leftmargin=3.2em]
+\item frame an operational decision: objective, decision variables, constraints, KPI and the cost of each kind of error;
+\item build a trustworthy analytical dataset from raw operational records with SQL and Python, with every cleaning rule documented and counted;
+\item diagnose a process with control charts, Little's Law, process mining and cost-based anomaly alerts;
+\item produce point and probabilistic forecasts and validate them honestly against simple baselines;
+\item convert forecasts and their errors into inventory policies and test those policies by simulation;
+\item formulate and solve linear, integer and routing models, and interpret shadow prices and sensitivity;
+\item size capacity against a service-level agreement with queueing theory and discrete-event simulation, and plan under uncertainty with stochastic optimisation;
+\item estimate the causal effect of an operational change and deploy AI assistance with explicit guardrails;
+\item recommend an action quantified in XAF, with its uncertainty, and defend it orally.
+\end{enumerate}
+
+\section*{Seven-week map}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}c L{3.0cm} Y L{2.5cm} L{1.7cm}@{}}
+\toprule
+\textbf{Wk} & \textbf{Theme} & \textbf{Core methods and lab} & \textbf{Real data} & \textbf{LOs}\\\midrule
+1 & Operational data, KPIs and SQL & KPI design, data-quality rules as code, DuckDB SQL with window functions, ABC--XYZ segmentation & Online Retail II (1.07\,M lines) & 1, 2, 9\\
+2 & Process diagnostics & Common vs special cause, $p$-charts, Phase I/II limits, Little's Law, process discovery and conformance, alerts tuned by cost & Permit process log; NAB machine temperature & 3\\
+3 & Forecasting for decisions & Rolling-origin validation, WAPE/MASE/bias, ETS, Croston/ADIDA, LightGBM benchmark, conformal intervals & Online Retail weekly SKU demand & 4\\
+4 & Inventory policy from forecasts & EOQ, safety stock from forecast error, $(s,Q)$ and $(R,S)$ simulation, newsvendor with quantiles, bullwhip & Lab 3 forecasts; beer game & 5\\
+5 & Optimisation & LP and duality, MIP modelling, facility location, rostering, vehicle routing & Cameroon city network; Douala deliveries & 1, 6\\
+6 & Capacity, queues and uncertainty & Erlang C staffing to an SLA, SimPy simulation with replications, two-stage stochastic programming, VSS and EVPI & Online Retail order arrivals & 7\\
+7 & Did it work? & A/B testing with SRM checks, regression and doubly robust adjustment, DiD and event studies, LLM guardrails & Hillstrom e-mail test; organ-donation policy & 8, 9\\
+\midrule
+Exam wk & Capstone defence & 12-minute presentation, 8-minute questioning on a decision you recommend & Your choice & 1--9\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{Anatomy of a 4-hour session}
+Every session follows the same rhythm, so no time is lost on set-up.
+\begin{center}
+\begin{tikzpicture}[x=0.06cm]
+  \foreach \s/\e/\c/\t in {0/20/navy/Briefing,20/70/teal/Concepts,70/160/orange/Guided lab,160/220/brick/Challenge,220/240/slate/Debrief}{
+    \fill[\c] (\s,0) rectangle (\e,0.75);
+    \node[font=\sffamily\scriptsize\bfseries,text=white] at ({(\s+\e)/2},0.375) {\t};}
+  \foreach \x/\l in {0/0:00,20/0:20,70/1:10,160/2:40,220/3:40,240/4:00}
+    \node[font=\sffamily\scriptsize,text=slate,below] at (\x,0) {\l};
+\end{tikzpicture}
+\end{center}
+About 170 of the 240 minutes are hands-on. The debrief is compulsory: each student states, in two sentences, what the
+numbers mean for a manager and what decision they support. Ten minutes of break are taken inside the guided lab.
+
+\section*{Assessment}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{4.1cm} L{2.0cm} Y r@{}}
+\toprule
+\textbf{Component} & \textbf{When} & \textbf{Content} & \textbf{Weight}\\\midrule
+CA1 (practical, 2 h) & after Week 2 & Data audit, KPIs and a process diagnosis on an unseen dataset & 10\%\\
+CA2 (practical, 2 h) & after Week 4 & Forecast a set of items and set their stock policy; cost the result & 15\%\\
+CA3 (practical, 2 h) & after Week 6 & Formulate and solve an allocation model; test it under uncertainty by simulation & 15\%\\
+Capstone checkpoints & Weeks 3 and 5 & Proposal and data audit (W3); baseline model and decision prototype (W5) & 5\%\\
+Capstone report and code & exam week & A decision recommendation with quantified impact, reproducible repository & 25\%\\
+Capstone defence & exam week & 12-minute presentation, 8 minutes of questions on choices and trade-offs & 20\%\\
+Final examination & end of course & Short theory and applied problems (formula sheet allowed) & 10\%\\\midrule
+\textbf{Total} & & & \textbf{100\%}\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Learning outcomes and assessment} Every outcome is assessed at least twice, once in a timed practical
+and once in the capstone.
+\begin{center}\small\sffamily
+\begin{tabular}{@{}lccccccccc@{}}
+\toprule
+ & LO1 & LO2 & LO3 & LO4 & LO5 & LO6 & LO7 & LO8 & LO9\\\midrule
+CA1 & \textbullet & \textbullet & \textbullet & & & & & & \textbullet\\
+CA2 & \textbullet & & & \textbullet & \textbullet & & & & \textbullet\\
+CA3 & \textbullet & & & & & \textbullet & \textbullet & & \textbullet\\
+Capstone (report) & \textbullet & \textbullet & $\circ$ & $\circ$ & $\circ$ & $\circ$ & $\circ$ & \textbullet & \textbullet\\
+Defence & \textbullet & & & & & & & \textbullet & \textbullet\\
+Final exam & \textbullet & & \textbullet & \textbullet & \textbullet & \textbullet & \textbullet & \textbullet & \\\bottomrule
+\multicolumn{10}{@{}l}{\footnotesize \textbullet\ always assessed \quad $\circ$\ assessed when the project uses that method (each project must use at least three)}
+\end{tabular}
+\end{center}
+
+\paragraph{Lab marking rubric (CA1--CA3)}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{3.6cm}Yr@{}}
+\toprule
+\textbf{Criterion} & \textbf{What earns full marks} & \textbf{Share}\\\midrule
+Correctness & Runs top to bottom on a fresh kernel; no leakage; results reproduce & 30\%\\
+Decision framing & States the decision, the cost of each error and the constraint that binds & 20\%\\
+Method choice & Justified, compared with a simple baseline, uncertainty shown & 20\%\\
+So what & A manager-ready paragraph with numbers, units, XAF impact and a recommended action & 20\%\\
+Code and communication & Clear names, comments, labelled axes, no dead code & 10\%\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{pitfall}{AI assistants and academic integrity}
+You may use AI coding assistants. You must (i) be able to explain every line you submit, (ii) list the prompts you
+used in an appendix, and (iii) never submit output you have not run. In the defence, a line you cannot explain is
+treated as copied. Never paste real personal or confidential organisational data into an external AI service.
+\end{pitfall}
+
+\section*{How to read these notes}
+Coloured boxes help you find what you need. Code appears in blue-tinted listings; the grey block underneath is
+the output the code printed when these notes were built. If your numbers differ beyond rounding, check your
+package versions against \texttt{requirements.txt} first.
+
+\begin{center}\small\sffamily
+\begin{tabular}{@{}l l@{}}
+\tcbox[colback=navy,colframe=navy,coltext=white,size=small,on line]{Definition} & precise statement of a concept; learn these\\
+\tcbox[colback=teal,colframe=teal,coltext=white,size=small,on line]{Key formula} & results you must be able to use and derive\\
+\tcbox[colback=green,colframe=green,coltext=white,size=small,on line]{Worked example} & a fully calculated numerical example\\
+\tcbox[colback=orange,colframe=orange,coltext=white,size=small,on line]{Practical lab} & the guided coding session; type the code, do not paste\\
+\tcbox[colback=brick,colframe=brick,coltext=white,size=small,on line]{Common pitfall} & mistakes that cost marks, and money in practice\\
+\tcbox[colback=navy!85,colframe=navy!85,coltext=white,size=small,on line]{In practice} & a documented case from a real organisation\\
+\end{tabular}
+\end{center}
+
+% ================================================================== GETTING STARTED
+\chapter*{Getting Started: Tools, Data and the Running Case}
+\addcontentsline{toc}{chapter}{Getting Started: Tools, Data and the Running Case}
+\markboth{Getting Started: Tools, Data and the Running Case}{}
+
+\section*{A free, low-setup, professional stack}
+Python is the single language of the course, so you install one environment and use it all semester. Nothing
+requires a paid licence or a Windows machine.
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{3.0cm}L{4.4cm}Y@{}}
+\toprule
+\textbf{Need} & \textbf{Tool} & \textbf{Why}\\\midrule
+Run code & Google Colab (primary); local JupyterLab with \texttt{uv} or Miniforge (fallback) & Colab needs no installation and works on weak laptops; the local fallback covers unreliable internet.\\
+Version control, submission & GitHub (free) & Industry standard; your capstone repository is what you defend.\\
+Reports & Jupyter or Quarto & Free and reproducible; export to HTML or PDF.\\
+SQL & DuckDB & No server; queries CSV and Parquet files directly; fast on a million rows.\\
+Dashboards & Looker Studio (browser) & Free, shareable, no Windows dependency. A Plotly or Quarto dashboard is an alternative.\\
+Forecasting & statsforecast, LightGBM & Fast classical models with honest cross-validation; one ML benchmark.\\
+Process mining & PM4Py (needs Graphviz for drawings) & Academic-grade discovery and conformance.\\
+Optimisation & PuLP + CBC, OR-Tools & Open-source solvers that handle every model in the course; Google Sheets or LibreOffice Solver for spreadsheet work.\\
+Simulation & NumPy, SimPy & Monte Carlo and discrete-event simulation in a few dozen lines.\\
+Causal inference & statsmodels, scikit-learn & Regression, propensity models, clustered standard errors.\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{lstlisting}[style=sh,caption={Setting up (local). In Colab, run the same \texttt{pip} line with a leading \texttt{!}.}]
+git clone https://github.com/<your-account>/bpa-yibs.git && cd bpa-yibs
+uv venv && source .venv/bin/activate        # Windows: .venv\Scripts\activate
+uv pip install -r requirements.txt          # or: pip install -r requirements.txt
+python datagen.py                           # Mboa Fresh Market teaching case -> ./data
+python get_data.py                          # real public datasets -> ./real
+jupyter lab
+\end{lstlisting}
+
+\begin{pitfall}{Unpinned versions break labs}
+While these notes were being tested, two library releases broke working code. PuLP 4 changed how variables are
+created, and an OR-Tools build failed to load when a newer \texttt{highspy} had been imported first (both bundle the
+HiGHS solver). Both are pinned in \texttt{requirements.txt}. Put your own \texttt{pip freeze > requirements.txt} in
+every submission: ``it worked on my laptop'' is not evidence.
+\end{pitfall}
+
+\paragraph{Practical tips} The instructor provides one starter repository with the install cell, the data scripts
+and the lab skeletons, so week one is not spent debugging environments. All datasets are also copied to a shared
+drive and a USB stick before the course starts, in case the connection fails during a lab.
+
+\section*{Two kinds of data, on purpose}
+Every week pairs \textbf{synthetic} data, where the true answer is known, with \textbf{real} data, where it is not
+and the data are messy in ways nobody planned.
+
+\paragraph{The teaching case: Mboa Fresh Market} A fictional supermarket chain with six stores in Yaoundé, Douala and
+Bafoussam and twelve fast-moving products. \texttt{datagen.py} (Appendix A) writes the files below with a fixed seed.
+Use Mboa to check that a method recovers a truth you know, for example the $+8\%$ loyalty-app effect or the $+3$-point
+training effect. Do not read the generator to find the answers before Week 7.
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{2.6cm}L{2.2cm}Y@{}}
+\toprule
+\textbf{File} & \textbf{Size} & \textbf{Content and deliberate problems}\\\midrule
+\texttt{sales.csv} & 52\,672 rows & Daily units and price by store and product, 2023--2024; duplicates, missing and negative units, keying errors ($\times40$), mixed-case store codes. Douala stores gain $+8\%$ from 1 July 2024.\\
+\texttt{products.csv} & 12 rows & Cost, price, category, lead time, order cost and shelf life.\\
+\texttt{stores.csv} & 6 rows & City and floor area.\\
+\texttt{event\_log.csv} & 9\,193 events & 1\,500 student-registration cases with rework and order violations.\\
+\texttt{clinic.csv} & 3\,021 rows & 30 days of walk-in arrivals and service times (queueing exercises).\\
+\texttt{employees.csv} & 600 rows & Skill, tenure, training and productivity; training is \emph{not} randomly assigned.\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{The real datasets} All are free for teaching. Cite them in your work (full references in Appendix B).
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{3.3cm}L{0.9cm}Y L{2.2cm}@{}}
+\toprule
+\textbf{Dataset} & \textbf{Week} & \textbf{What it is and why it is hard} & \textbf{Licence}\\\midrule
+Online Retail II (UCI) & 1, 3, 4, 6 & Every transaction of a UK online gift wholesaler, Dec 2009--Dec 2011: 1\,067\,371 lines. Cancellations, write-offs, postage and fee codes mixed with sales, 243\,007 lines without a customer, a mixed-type invoice column, lumpy demand. & CC BY 4.0\\
+Receipt phase of an environmental permit process (4TU) & 2 & Real event log from a Dutch municipality: 1\,434 cases, 8\,577 events, 116 variants, case deadlines. & 4TU terms of use\\
+NAB machine temperature (Numenta) & 2 & Five-minute temperature of a large industrial machine with a planned shutdown and a catastrophic failure, labelled by experts. & Open (GitHub)\\
+Hillstrom e-mail test & 7 & 64\,000 customers randomised to a men's e-mail, a women's e-mail or none; visits, conversions and spend over two weeks. & Free, public\\
+Organ-donation panel & 7 & Quarterly donor-registration rates for 27 US states around California's 2011 active-choice rule. & In \texttt{causaldata}\\
+Open-Meteo (optional) & 3 & Historical and forecast weather for any city, no API key. & Free, non-commercial\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{insight}{Pre-course readiness check (self-study, about 3 hours)}
+The course assumes you can already do the following without help. If you cannot, work through Appendix C before
+Week 1.
+\begin{enumerate}[nosep]
+\item Load a CSV with pandas, parse dates, filter rows, group and aggregate, merge two tables, pivot.
+\item Write a SQL query with \texttt{JOIN}, \texttt{GROUP BY}, \texttt{HAVING} and \texttt{ORDER BY}.
+\item Fit and evaluate a scikit-learn regression model and explain overfitting.
+\item Commit and push a notebook to GitHub.
+\item State the four levels of analytics (descriptive, diagnostic, predictive, prescriptive) and give one
+operations example of each. That is all the course will say about them.
+\end{enumerate}
+\end{insight}

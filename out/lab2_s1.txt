@@ -1,0 +1,8 @@
+1,434 cases | 8,577 events | 27 activities | 48 resources | 2010-10-02 to 2012-01-23
+116 distinct variants; top 5:
+                                                       cases  share    cum
+Confirmation of receipt > T02 > T04 > T05 > T06 > T10    713  0.497  0.497
+Confirmation of receipt > T06 > T10 > T02 > T04 > T05    123  0.086  0.583
+Confirmation of receipt                                  116  0.081  0.664
+Confirmation of receipt > T02 > T06 > T10 > T04 > T05    115  0.080  0.744
+Confirmation of receipt > T02 > T04 > T06 > T10 > T05     75  0.052  0.796

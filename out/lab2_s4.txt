@@ -1,0 +1,11 @@
+reaches_T05_send     9.3
+T02_before_T04       0.0
+T06_before_T10       0.0
+no_repeated_task     6.3
+all_rules           15.3
+
+cases finishing after their deadline: 6.4%
+           cases  late_rate  median_days
+all_rules                               
+False        220      0.164         0.00
+True        1214      0.046         0.05

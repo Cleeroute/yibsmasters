@@ -1,0 +1,6 @@
+annual demand D = 7,318 units, K = 15,000 XAF, h = 700 XAF/unit/yr
+EOQ = 560 units  (~28 days of demand), annual order+holding cost = 392,018 XAF
+  order 0.50 x EOQ -> cost +25.0%
+  order 0.80 x EOQ -> cost +2.5%
+  order 1.25 x EOQ -> cost +2.5%
+  order 2.00 x EOQ -> cost +25.0%

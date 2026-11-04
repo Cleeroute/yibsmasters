@@ -1,0 +1,2 @@
+lambda = 3.38 cases/day   W = 4.97 days   lambda*W = 16.8
+measured average WIP (Mar-Oct 2011) = 17.4 open cases

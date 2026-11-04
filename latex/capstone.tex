@@ -1,0 +1,78 @@
+\chapter*{The Capstone Project and Defence}
+\addcontentsline{toc}{chapter}{The Capstone Project and Defence}
+\markboth{The Capstone Project and Defence}{}
+
+The capstone is where you show that you can do the whole thread on a problem nobody has solved for you: frame a
+decision, build the data, predict, decide, test under uncertainty, and defend the recommendation in francs. It runs
+alongside the course from Week 2 so that it accumulates rather than being crammed into the last week.
+
+\section*{Timeline}
+\begin{center}
+\begin{tikzpicture}[x=1.95cm]
+  \draw[slate,thick] (0.6,0)--(8.4,0);
+  \foreach \x/\w/\t/\c in {1/W1/Teams formed;\\two ideas/slate,2/W2/Launch:\\proposal brief/navy,3/W3/Checkpoint 1:\\data + baseline/teal,4/W4/Work week/slate,
+     5/W5/Checkpoint 2:\\model + decision/teal,6/W6/Work week/slate,7/W7/Draft report\\feedback/orange,8/Exam wk/Report + code\\and defence/brick}{
+    \fill[\c] (\x,0) circle (5pt);
+    \node[font=\sffamily\bfseries\scriptsize,above=6pt] at (\x,0) {\w};
+    \node[font=\sffamily\scriptsize,below=7pt,align=center,text width=1.8cm] at (\x,0) {\t};}
+\end{tikzpicture}
+\end{center}
+
+\section*{Requirements}
+\begin{enumerate}[nosep]
+\item \textbf{A decision statement} with owner, KPI, constraints and both error costs in XAF (Week 1 template).
+\item \textbf{Real data.} A public dataset not used in the labs, or anonymised data from a partner organisation with
+written permission. Synthetic data is allowed only for a component you cannot observe, and must be labelled.
+\item \textbf{A data audit}: cleaning rules as code with counts and value affected.
+\item \textbf{At least three methods from different weeks}, one of which is prescriptive (Weeks 4--6), compared with
+an explicit baseline policy (what the organisation does now, or a simple rule).
+\item \textbf{Uncertainty}: an interval, a scenario analysis or a simulation for the key number.
+\item \textbf{Impact}: the recommended action, its expected value in XAF per month or year, and what would change the
+recommendation.
+\item \textbf{Reproducibility}: a GitHub repository that runs top to bottom from \texttt{requirements.txt}, with a
+README and a prompt log for any AI assistance.
+\item \textbf{Report}: at most 12 pages plus appendices; a one-page executive summary first.
+\end{enumerate}
+
+\section*{Assessment rubric (report and code 25\%, defence 20\%)}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{3.6cm}Y r@{}}
+\toprule
+\textbf{Criterion} & \textbf{Excellent work} & \textbf{Share}\\\midrule
+Decision framing & Clear owner, KPI, constraints and error costs; scope fits the data & 15\%\\
+Data and validation & Audit as code; honest time-based validation; no leakage & 20\%\\
+Methods & Appropriate, compared with a baseline, assumptions stated and checked & 20\%\\
+Decision and uncertainty & Prescriptive output, uncertainty quantified, sensitivity to key assumptions & 20\%\\
+Impact and communication & XAF impact credible; executive summary a manager could act on & 15\%\\
+Reproducibility & Runs from a clean clone; tidy repository; prompt log & 10\%\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\section*{Defence format}
+Twelve minutes of presentation by both team members, then eight minutes of questions. Expect questions of four kinds:
+\emph{why} (``why this service level?''), \emph{what if} (``what if lead time doubles?''), \emph{show me} (``run cell 14
+and explain line 6'') and \emph{so what} (``what should the manager do on Monday?''). Each member is marked
+individually on the defence. A team member who cannot explain the team's code receives at most half of the defence
+marks.
+
+\section*{Project ideas}
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{4.2cm}Y L{3.4cm}@{}}
+\toprule
+\textbf{Idea} & \textbf{Decision} & \textbf{Possible data}\\\midrule
+Retail replenishment & Store order policy for a category; cost vs.\ fill rate & M5 (Walmart, Kaggle), Favorita (Kaggle)\\
+Hospital or clinic staffing & Nurse or doctor roster against waiting-time targets & Partner hospital logs; MIMIC-IV ED (credentialed)\\
+Predictive maintenance & Inspection threshold and spare-parts stock & NASA C-MAPSS turbofan; other NAB series\\
+Last-mile delivery & Fleet size and routes with time windows & OpenStreetMap roads; Solomon VRP instances\\
+Process improvement & Which bottleneck to fix first in a back office & BPI Challenge logs (4TU)\\
+Marketing operations & Whom to target, with a profit-based uplift model & Criteo uplift, Hillstrom (other outcomes)\\
+Energy or water operations & Pump or generator scheduling under demand uncertainty & Open-Meteo weather + public load data\\
+Local partner & Any of the above for a Cameroonian SME, NGO or hospital & With written data-use agreement\\\bottomrule
+\end{tabularx}
+\end{center}
+
+\begin{pitfall}{Projects that fail}
+The commonest failing capstones (i) predict something without a decision, (ii) optimise without data, using invented
+parameters for everything, or (iii) choose a dataset too large to process on a laptop and spend six weeks on
+engineering. Choose a decision you can describe in one sentence and a dataset you can load in one minute.
+\end{pitfall}

@@ -1,0 +1,2 @@
+nominal 80% interval -> empirical coverage 74.5%
+nominal 95% interval -> empirical coverage 85.5%

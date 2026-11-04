@@ -1,0 +1,9 @@
+rows               1067371
+invoices           53628
+stock_codes        5305
+first_day          2009-12-01 00:00:00
+last_day           2011-12-09 00:00:00
+cancel_lines       19494
+negative_qty       22950
+zero_or_neg_price  6207
+no_customer        243007

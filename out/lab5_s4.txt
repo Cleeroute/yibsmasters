@@ -1,0 +1,4 @@
+van 1: 34 crates, 41.6 km  Akwa > New > Ndokoti > Logbaba > Yassa > Bonapriso > Akwa
+van 2: 35 crates, 29.8 km  Akwa > Bepanda > Makepe > Kotto > Logpom > Bonamoussadi > Akwa
+van 3: 21 crates, 19.5 km  Akwa > Deido > Bonaberi > Bonanjo > Akwa
+total distance 90.9 km

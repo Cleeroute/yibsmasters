@@ -1,0 +1,5 @@
+               WAPE_%  bias_%  MASE
+AutoETS         26.87   -6.80  0.93
+WindowAverage   28.02   -5.58  0.97
+SeasonalNaive   36.36   -2.58  1.26
+Naive           36.88  -15.19  1.28

@@ -1,0 +1,11 @@
+Optimal | daily margin = 275,400 XAF
+bread        640.0
+beignets    3000.0
+meat_pie     900.0
+                 slack  shadow_price
+flour             -0.0         240.0
+oven             202.0          -0.0
+labour           400.0          -0.0
+demand_bread     560.0          -0.0
+demand_beignets   -0.0          13.0
+demand_meat_pie   -0.0         156.0

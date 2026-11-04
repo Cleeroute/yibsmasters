@@ -1,0 +1,8 @@
+test weeks: 2011-04-25 to 2011-11-28
+                  WAPE_%  bias_%  MASE
+ADIDA              53.15    0.18  0.70
+CrostonOptimized   53.30    0.17  0.70
+WindowAverage      53.78   -1.31  0.71
+SESOpt             53.92    1.45  0.71
+Naive              71.86    4.60  0.93
+SeasonalNaive      84.65   31.87  1.12

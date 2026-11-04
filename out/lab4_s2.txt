@@ -1,0 +1,8 @@
+lead-time demand (unconditional)   sd =  26.6  -> safety stock   44 units
+daily demand sd x sqrt(L)          sd =  23.0  -> safety stock   38 units
+lead-time forecast error           sd =  20.8  -> safety stock   34 units
+           Q safety_stock  orders  fill_rate_%  avg_stock  cost_kXAF
+   EOQ (560)         none      15         99.1        277        419
+   EOQ (560)  error-based      15        100.0        310        442
+weekly (141)         none      59         94.2         67        932
+weekly (141)  error-based      59         99.7        100        955

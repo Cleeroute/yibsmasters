@@ -1,0 +1,103 @@
+% ================================================================== COVER
+\begin{titlepage}
+\thispagestyle{empty}
+\begin{tikzpicture}[remember picture,overlay]
+  \fill[navy] (current page.north west) rectangle ([yshift=-10.2cm]current page.north east);
+  \fill[teal] ([yshift=-10.2cm]current page.north west) rectangle ([yshift=-10.55cm]current page.north east);
+  \fill[orange] ([yshift=-10.55cm]current page.north west) rectangle ([xshift=5.2cm,yshift=-10.75cm]current page.north west);
+  % network motif
+  \begin{scope}[shift={([xshift=-5.2cm,yshift=-4.6cm]current page.north east)},every node/.style={circle,fill=white!70!navy,inner sep=1.6pt}]
+    \node (a) at (0,2.2) {}; \node (b) at (1.4,1.6) {}; \node (c) at (2.6,2.9) {}; \node (d) at (-1.2,0.9) {};
+    \node (e) at (0.4,0.2) {}; \node (f) at (2.0,0.5) {}; \node (g) at (3.3,1.3) {}; \node (h) at (1.2,-1.0) {};
+    \node (i) at (2.7,-0.9) {}; \node (j) at (3.6,3.5) {}; \node (k) at (-0.3,-0.9) {};
+    \foreach \u/\v in {a/b,b/c,b/e,d/e,e/f,f/g,c/g,f/h,h/i,g/i,c/j,d/a,e/k,k/h}
+      \draw[white!55!navy,line width=0.6pt] (\u)--(\v);
+  \end{scope}
+  \node[anchor=north west,text width=12cm,text=white,font=\sffamily] at ([xshift=2.4cm,yshift=-2.2cm]current page.north west)
+   {{\bfseries\large YAOUNDÉ INSTITUTE OF BUSINESS STUDIES}\\[1pt]{\small (YIBS)}\\[14pt]
+    {\fontsize{34}{38}\selectfont\bfseries Business Process\\[2pt] Analytics}\\[12pt]
+    {\large Forecasts, Inventory, Optimisation and\\ Decisions under Uncertainty}};
+\end{tikzpicture}
+\vspace*{10.6cm}
+
+\noindent{\sffamily
+{\color{navy}\bfseries\large COMPLETE LECTURE NOTES \,--\, SECOND EDITION}\\[4pt]
+{\small Seven-week practical course (7 $\times$ 4 hours) \quad$\bullet$\quad 28 contact hours \quad$\bullet$\quad capstone defence in examination week}\\[16pt]
+\renewcommand{\arraystretch}{1.25}
+\begin{tabular}{@{}>{\color{teal}\bfseries}l@{\hspace{1.2cm}}l@{}}
+Programme & Master of Technology 2 (MTech 2)\\
+Specialisation & Data Science and Artificial Intelligence\\
+Institution & Yaoundé Institute of Business Studies (YIBS)\\[6pt]
+Lecturer & \textbf{FOLEFAC Martins}\\
+Telephone & 673\,909\,069\\
+Edition & Second edition, November 2026
+\end{tabular}}
+
+\vfill
+\begin{plainnote}
+\textbf{Learning by doing, on real data.} Every week pairs the Mboa Fresh Market teaching case (synthetic, with
+planted truths you can check) with a real public dataset: 1.07 million retail transactions, a municipal permit
+process log, an industrial machine that failed, a 64\,000-customer randomised experiment and a policy change
+across 27 US states. Every line of code in these notes was run end to end before printing; the output you see
+is what it produced. All software is free and runs in Google Colab or on a laptop.
+\end{plainnote}
+\end{titlepage}
+
+% ================================================================== CONTENTS
+\tableofcontents
+\clearpage
+\pagenumbering{arabic}
+
+% ================================================================== WHAT CHANGED
+\chapter*{What Is New in the Second Edition}
+\addcontentsline{toc}{chapter}{What Is New in the Second Edition}
+\markboth{What Is New in the Second Edition}{}
+
+The first edition was reviewed against what a strong process-analytics course should achieve for MTech Data
+Science students who already know Python and machine learning. The review found a good topic list held back by
+sequence, depth and data. This edition is built around one idea: \textbf{a forecast is only worth what the decision
+built on it is worth}. Each week now hands its output to the next, from clean data to a forecast, from the forecast
+to a stock policy, from the policy to an optimised plan, and from the plan to a test of whether it worked.
+
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}L{4.6cm}Y@{}}
+\toprule
+\textbf{Finding from the review} & \textbf{What this edition does}\\\midrule
+Forecasting (old Week 3) was separated from the inventory decisions that use it (old Week 6). &
+Inventory moves to Week 4, directly after forecasting. Safety stock is computed from the forecast errors measured
+in Lab 3, and the newsvendor order is set from a forecast quantile. \emph{Predict-then-optimise} is the spine of
+the course, not a subsection.\\
+Week 1 spent time on generic framing and pandas review. &
+Generic material is condensed into one page and a pre-course readiness check. Week 1 goes straight to KPIs,
+data quality and SQL on 1.07 million real transactions.\\
+Chapters 2, 4 and 7 were grab-bags; Power BI needed Windows and a licence. &
+SQL now serves the analysis instead of being a separate tool tutorial. Looker Studio (free, browser-based)
+replaces Power BI as a take-home. Process mining, control charts and anomaly detection are unified as
+\emph{process diagnostics}. Predictive maintenance becomes a capstone option. The capstone has its own chapter.\\
+Optimisation, simulation and causal inference were thin. &
+Optimisation gets a full week with a national distribution-network design. Queueing, discrete-event simulation
+and stochastic optimisation share Week 6. Causal evaluation (A/B, adjustment, doubly robust, DiD with event study)
+fills Week 7.\\
+The capstone started in the last week; the defence was worth 10\%. &
+The capstone launches in Week 2 with checkpoints in Weeks 3 and 5. The defence is worth 20\% and is held in
+examination week. A learning-outcome-to-assessment map is given.\\
+Only synthetic data; the generator revealed the planted patterns. &
+Every week now has a real public dataset with documented licence and messiness. The Mboa generator stays, but
+only to check whether a method recovers a known truth.\\
+Missing classics: SPC, bullwhip, optimisation under uncertainty, SLAs. &
+All four are added: $p$-charts and Phase I/II control (Week 2), the bullwhip effect and a beer-game simulation
+(Week 4), two-stage stochastic programming with VSS and EVPI (Week 6), and SLA-based staffing (Week 6).\\
+Overlap with machine-learning courses. &
+Model building is kept brief. The new material is the decision layer: cost asymmetry, constraints, uncertainty,
+service levels and causal evaluation. LightGBM appears once, as a benchmark that must beat simple baselines.\\
+``The AI Operations Analyst'' risked reading as hype. &
+Replaced by a concrete section on what an LLM can and cannot do in a replenishment workflow, with documented
+failure cases and a tested guardrail that checks an AI-proposed order before a human approves it.\\
+\bottomrule
+\end{tabularx}
+\end{center}
+
+\paragraph{Tools} Everything is free and needs minimal setup: Google Colab (or local Jupyter with \texttt{uv}),
+GitHub, DuckDB, statsforecast, PuLP with CBC, OR-Tools, SimPy, PM4Py and Looker Studio. Versions are pinned in
+\texttt{requirements.txt}; two real version conflicts found while testing these notes are documented where they
+bite (Weeks 1 and 5).

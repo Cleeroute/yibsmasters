@@ -1,0 +1,4 @@
+valid lines cost 1,548,000 XAF; 3 issues found:
+  [P13] unknown product: not in master data
+  [P07] perishable: 900 units > 2 days of demand (237)
+  [P06] non-positive order quantity

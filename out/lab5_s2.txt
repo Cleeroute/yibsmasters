@@ -1,0 +1,6 @@
+open DCs: ['Douala', 'Bafoussam'] | fixed 8.0 + freight 6.7 = 14.7 M XAF/week
+  Bafoussam  serves Yaounde, Bamenda, Bafoussam, Garoua, Maroua, Ngaoundere (140 t/week)
+  Douala     serves Douala, Bertoua, Kumba, Buea, Limbe, Nkongsamba, Edea, Ebolowa, Kribi (107 t/week)
+freight rate  60 XAF/t-km -> open ['Douala', 'Bafoussam'], total 12.5 M XAF/week
+freight rate 120 XAF/t-km -> open ['Douala', 'Yaounde'], total 16.6 M XAF/week
+freight rate 150 XAF/t-km -> open ['Douala', 'Yaounde'], total 18.3 M XAF/week

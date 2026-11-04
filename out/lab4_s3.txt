@@ -1,0 +1,6 @@
+underage cu = 60 XAF, overage co = 150 XAF, critical ratio = 0.286
+quantile of actual/forecast at the critical ratio: 0.819
+                            plan  profit_kXAF  in_stock_days_%  waste_loaves
+           order = mean forecast         1174             53.0          4718
+order = forecast x quantile adj.         1367             32.0          1929
+    order = 2023 average (fixed)         1286             39.1          2661

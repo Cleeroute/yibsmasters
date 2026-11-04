@@ -1,0 +1,3 @@
+local forecasts  Retailer:   2.2x  Wholesaler:   5.6x  Distributor:  14.8x  Factory:  37.0x
+shared POS data  Retailer:   2.2x  Wholesaler:   4.2x  Distributor:   6.8x  Factory:  10.1x
+theory, one stage (Chen et al.): >= 1.62x

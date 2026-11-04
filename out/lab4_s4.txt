@@ -1,0 +1,5 @@
+ target_CSL    z  fill_rate_%  avg_units_on_hand
+       0.90 1.28         92.7              61201
+       0.95 1.64         94.6              70925
+       0.99 2.33         96.9              89560
+forecast bias in the evaluation period (Aug-Nov 2011): -4.0%

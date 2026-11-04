@@ -1,0 +1,6 @@
+                     T06 -> T10     1051
+                     T04 -> T05     1044
+                     T02 -> T04      976
+ Confirmation of receipt -> T02      956
+                     T05 -> T06      738
+ Confirmation of receipt -> T06      163

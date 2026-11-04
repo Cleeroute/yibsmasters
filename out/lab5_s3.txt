@@ -1,0 +1,10 @@
+cashiers hired: 11 | lower bound ceil(sum need / 5) = 11
+start Tue    3
+start Wed    2
+start Thu    3
+start Fri    1
+start Sat    2
+         Mon  Tue  Wed  Thu  Fri  Sat  Sun
+need       6    6    6    7    9   11    8
+staffed    6    6    7    8    9   11    8
+surplus    0    0    1    1    0    0    0

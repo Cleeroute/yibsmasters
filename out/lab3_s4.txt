@@ -1,0 +1,5 @@
+                  WAPE_%  bias_%  MASE
+ADIDA              53.15    0.18  0.70
+CrostonOptimized   53.30    0.17  0.70
+LightGBM           53.60   -7.75  0.71
+WindowAverage      53.78   -1.31  0.71

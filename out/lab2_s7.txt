@@ -1,0 +1,10 @@
+Phase I limits: mean 80.2, sd 7.7
+        detector   k  detected  false_alarms  cost_mXAF
+    A adaptive z 2.5         3            10       9.50
+    A adaptive z 3.0         3             7       9.05
+    A adaptive z 3.5         3             7       9.05
+    A adaptive z 4.0         3             5       8.75
+B fixed-limit MA 2.5         4             5       0.75
+B fixed-limit MA 3.0         4             3       0.45
+B fixed-limit MA 3.5         3             1       8.15
+B fixed-limit MA 4.0         2             0      16.00

@@ -1,0 +1,7 @@
+          dq_class   lines  pct_lines  value_k_gbp
+      0 valid sale 1036876      97.14      20109.0
+    1 cancellation   19494       1.83      -1526.7
+2 non-product code    4885       0.46        704.9
+ 3 stock write-off    3426       0.32          0.0
+      4 zero price    2690       0.25          0.0
+identical repeated lines among valid sales: 33665

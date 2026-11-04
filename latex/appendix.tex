@@ -1,0 +1,245 @@
+\appendix
+\renewcommand{\chaplabel}{APPENDIX}
+
+% ------------------------------------------------------------------ A
+\chapter{The Data Generator and the Data Scripts}
+\paragraph{\texttt{datagen.py}} Save it in your project folder and run \texttt{python datagen.py}. It writes six CSV
+files into \texttt{data/}. The seed is fixed (42), so every student gets the same files; small differences in results
+can still arise from library versions. Do not read it for answers before Week 7.
+\lstinputlisting[style=py,caption={\texttt{datagen.py}: the Mboa Fresh Market teaching case.}]{../datagen.py}
+
+\begin{insight}{How the data are built}
+Daily demand for product $p$ in store $s$ is
+$\mu_{spt}=b_p f_s\, w_{\text{dow}(t)}\, y_{\text{month}(t)}(1+0.0004t)(1+0.35\,\text{promo})$ with an 18\% December uplift,
+drawn from a Gamma--Poisson (negative binomial) distribution. Registration waits are exponential with
+activity-specific means; 22\% of cases repeat the document check; Monday payments wait 1.8 times longer. Training
+is assigned with probability rising in skill, and its true effect is $+3$ points.
+\end{insight}
+
+\paragraph{\texttt{get\_data.py}} Downloads the real datasets into \texttt{real/} and converts Online Retail II to
+Parquet. If a site is unreachable, copy the file from the class shared drive; the script skips files already present.
+\lstinputlisting[style=py,caption={\texttt{get\_data.py}: the real public datasets.}]{../get_data.py}
+
+\paragraph{\texttt{requirements.txt}}
+\lstinputlisting[style=sh,caption={Pinned versions used to test every lab.}]{../requirements.txt}
+
+% ------------------------------------------------------------------ B
+\chapter{Real Datasets: Sources and Citations}
+Cite every dataset you use. The references below are in the form expected in your capstone report.
+\begin{enumerate}[leftmargin=1.6em]
+\item Chen, D. (2012). \emph{Online Retail II} [Dataset]. UCI Machine Learning Repository.
+\url{https://doi.org/10.24432/C5CG6D}. Licence CC BY 4.0. 1\,067\,371 transaction lines, 1 Dec 2009 to 9 Dec 2011,
+UK-based non-store retailer of gift-ware; many customers are wholesalers.
+\item Buijs, J.\,C.\,A.\,M. (2014). \emph{Receipt phase of an environmental permit application process (`WABO'),
+CoSeLoG project} [Dataset]. 4TU.ResearchData. \url{https://doi.org/10.4121/12709127.v2}. 4TU General Terms of Use.
+1\,434 cases, 8\,577 events from an anonymous Dutch municipality.
+\item Lavin, A. and Ahmad, S. (2015). Evaluating real-time anomaly detection algorithms: the Numenta Anomaly Benchmark.
+\emph{IEEE ICMLA}. Data: \url{https://github.com/numenta/NAB}, file
+\path{realKnownCause/machine_temperature_system_failure.csv} and labels in \path{labels/combined_windows.json}.
+\item Hillstrom, K. (2008). \emph{The MineThatData E-Mail Analytics and Data Mining Challenge}. MineThatData blog,
+20 March 2008. 64\,000 customers randomised to men's e-mail, women's e-mail or no e-mail. Also distributed by
+TensorFlow Datasets (\texttt{hillstrom}) and the \texttt{scikit-uplift} package.
+\item Kessler, J.\,B. and Roth, A.\,E. (2014). Don't take `no' for an answer: an experiment with actual organ donor
+registrations. NBER Working Paper 20378. Panel as distributed in the \texttt{causaldata} package (Huntington-Klein,
+\emph{The Effect}, 2021).
+\item Open-Meteo. Historical Weather API, \url{https://open-meteo.com}. Free for non-commercial use, no key.
+\end{enumerate}
+
+\begin{pitfall}{Licences and personal data}
+``Public'' does not mean ``free for any use''. Check the licence before publishing results or code built on a dataset,
+and never upload data about identifiable people (customers, patients, staff) to an external service. PM4Py itself is
+licensed under AGPL-3.0: fine for coursework, but commercial use of software built on it has obligations.
+\end{pitfall}
+
+% ------------------------------------------------------------------ C
+\chapter{Python, SQL and Library Quick Reference}
+\paragraph{Course style cell} Run once at the top of every notebook.
+\begin{lstlisting}[style=py,caption={Plot style and colours used in every lab.}]
+import warnings; warnings.filterwarnings("ignore")
+import numpy as np, pandas as pd, matplotlib.pyplot as plt
+plt.rcParams.update({"font.size": 9, "axes.spines.top": False, "axes.spines.right": False, "figure.dpi": 150})
+NAVY, TEAL, ORANGE, RED, GREY = "#14325C", "#0F7C84", "#D9731A", "#B3322F", "#5F6B7A"
+\end{lstlisting}
+
+\paragraph{pandas}
+\begin{lstlisting}[style=py,numbers=none,xleftmargin=4pt,framexleftmargin=4pt]
+df = pd.read_csv("f.csv", parse_dates=["date"]); df.info(); df.describe()
+df.isna().sum(); df.duplicated().sum(); df.drop_duplicates()
+df.groupby("g")["x"].agg(total="sum", n="size"); df.groupby("g")["x"].transform("mean")
+df.merge(other, on="key", how="left", validate="m:1")      # validate catches fan-out
+df.pivot_table(index="week", columns="sku", values="y", aggfunc="sum", fill_value=0)
+s.resample("W").sum(); s.shift(7); s.rolling(28).mean(); s.ewm(alpha=0.2).mean()
+\end{lstlisting}
+
+\paragraph{DuckDB}
+\begin{lstlisting}[style=sql,numbers=none,xleftmargin=4pt,framexleftmargin=4pt]
+con = duckdb.connect(); con.sql("SELECT ... FROM 'file.parquet'").df()      -- query files directly
+SELECT g, count(*) FILTER (WHERE x < 0) AS neg, sum(v) AS total FROM t GROUP BY ALL;
+WITH m AS (SELECT ...) SELECT *, lag(total, 12) OVER (ORDER BY month) FROM m;
+SELECT * FROM t QUALIFY row_number() OVER (PARTITION BY store ORDER BY units DESC) <= 5;
+\end{lstlisting}
+
+\paragraph{statsforecast}
+\begin{lstlisting}[style=py,numbers=none,xleftmargin=4pt,framexleftmargin=4pt]
+sf = StatsForecast(models=[Naive(), SeasonalNaive(7), AutoETS(season_length=7)], freq="D", n_jobs=-1)
+cv = sf.cross_validation(df=Y, h=14, n_windows=6, step_size=14)   # columns unique_id, ds, y
+fc = sf.forecast(df=Y, h=14, level=[80, 95])
+\end{lstlisting}
+
+\paragraph{PuLP}
+\begin{lstlisting}[style=py,numbers=none,xleftmargin=4pt,framexleftmargin=4pt]
+m = pulp.LpProblem("name", pulp.LpMaximize)
+x = pulp.LpVariable.dicts("x", items, lowBound=0)           # cat="Integer" or "Binary"
+m += pulp.lpSum(c[i] * x[i] for i in items)                 # objective
+m += pulp.lpSum(a[i] * x[i] for i in items) <= b, "cap"     # named constraint
+m.solve(pulp.PULP_CBC_CMD(msg=False)); pulp.LpStatus[m.status]
+x[i].value(); m.constraints["cap"].pi; m.constraints["cap"].slack
+\end{lstlisting}
+
+\paragraph{SimPy}
+\begin{lstlisting}[style=py,numbers=none,xleftmargin=4pt,framexleftmargin=4pt]
+env = simpy.Environment(); server = simpy.Resource(env, capacity=3)
+def customer(env):
+    with server.request() as req:
+        yield req; yield env.timeout(rng.exponential(10))
+env.process(customer(env)); env.run(until=480)
+\end{lstlisting}
+
+\paragraph{Reproducibility checklist}
+(1) fixed seeds and pinned versions; (2) raw data untouched, cleaning as code with counts; (3) time-ordered validation,
+no leakage; (4) every figure labelled with units, every number in the text traceable to code; (5) assumptions,
+limitations and sensitivity stated; recommendations in XAF.
+
+% ------------------------------------------------------------------ D
+\chapter{Formula Sheet}
+\small
+\begin{tabularx}{\linewidth}{@{}L{4.0cm}Y@{}}
+\toprule
+\multicolumn{2}{@{}l}{\textbf{\sffamily\color{navy}KPIs and process}}\\\midrule
+Gross margin; turnover; days of supply & $(R-\text{COGS})/R$;\quad COGS$/\bar I$;\quad $365/\text{turnover}$\\
+OEE & availability $\times$ performance $\times$ quality\\
+Little's Law & $L=\lambda W$\\
+Control limits & I: $\bar x\pm2.66\,\overline{MR}$;\ $p$: $\bar p\pm3\sqrt{\bar p(1-\bar p)/n}$;\ EWMA: $\mu\pm L\sigma\sqrt{\lambda/(2-\lambda)}$\\
+Alert threshold & minimise $c_{FA}\,\mathrm{FA}(k)+c_{\text{miss}}\,\mathrm{Miss}(k)$; act if $p>c_{FA}/(c_{FA}+c_{\text{miss}})$\\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{\sffamily\color{navy}Forecasting} ($e_t=\hat y_t-y_t$)}\\\midrule
+WAPE; bias; MASE & $\sum|e_t|/\sum y_t$;\quad $\sum e_t/\sum y_t$;\quad $\mathrm{MAE}/\mathrm{MAE}_{\text{naive}}$\\
+Pinball loss & $\max\{\tau(y-q),(1-\tau)(q-y)\}$\\
+SES; interval & $\ell_t=\alpha y_t+(1-\alpha)\ell_{t-1}$;\quad $\hat y\pm z_{1-\alpha/2}\hat\sigma_h$\\
+Croston & forecast $=\hat z/\hat p$ (smoothed size / smoothed interval)\\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{\sffamily\color{navy}Inventory}}\\\midrule
+EOQ & $Q^*=\sqrt{2DK/h}$,\ $TC^*=\sqrt{2DKh}$,\ $TC(Q)/TC^*=\tfrac12(Q/Q^*+Q^*/Q)$\\
+Reorder point & $s=\hat D_L+z_\alpha\sigma_L$;\ $\sigma_L=\sqrt{\bar L\sigma_1^2+\bar d^2\sigma_{LT}^2}$\\
+Order-up-to $(R,S)$ & $S=\hat D_{R+L}+z_\alpha\sigma_{R+L}$\\
+Newsvendor & $F(Q^*)=c_u/(c_u+c_o)$;\ normal: $Q^*=\mu+z\sigma$, $\E[(Q-D)^+]=\sigma[z\Phi(z)+\varphi(z)]$\\
+Bullwhip bound & $\mathrm{Var}(q)/\mathrm{Var}(D)\ge1+2L/m+2L^2/m^2$\\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{\sffamily\color{navy}Optimisation}}\\\midrule
+LP primal / dual & $\max c^\top x$, $Ax\le b$, $x\ge0$\quad / \quad $\min b^\top y$, $A^\top y\ge c$, $y\ge0$\\
+Strong duality; shadow price & $c^\top x^*=b^\top y^*$;\quad $y_i^*=\partial z^*/\partial b_i$\\
+Fixed charge; linking & $q\le My$;\quad $a_{fc}\le y_f$\\
+MIP gap & $(\text{bound}-\text{incumbent})/|\text{incumbent}|$\\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{\sffamily\color{navy}Queues, simulation and uncertainty}}\\\midrule
+M/M/1 & $\rho=\lambda/\mu$, $L=\rho/(1-\rho)$, $W=1/(\mu-\lambda)$, $W_q=\rho/(\mu-\lambda)$, $L_q=\rho^2/(1-\rho)$\\
+Erlang C & $C(c,a)=\dfrac{\frac{a^c}{c!}\frac{c}{c-a}}{\sum_{k<c}\frac{a^k}{k!}+\frac{a^c}{c!}\frac{c}{c-a}}$, $W_q=\dfrac{C}{c\mu-\lambda}$, $P(W_q\le t)=1-Ce^{-(c\mu-\lambda)t}$\\
+Allen--Cunneen; square-root rule & $W_q\approx W_q^{M/M/c}(c_a^2+c_s^2)/2$;\quad $c\approx a+\beta\sqrt a$\\
+Replications CI & $\bar Y\pm t_{n-1,0.975}\,s/\sqrt n$\\
+VSS; EVPI & $\E[\text{stochastic plan}]-\E[\text{mean-value plan}]$;\quad $\E[\text{wait-and-see}]-\E[\text{stochastic plan}]$\\
+\midrule
+\multicolumn{2}{@{}l}{\textbf{\sffamily\color{navy}Causal inference}}\\\midrule
+Naive difference & ATT $+$ selection bias\\
+A/B sample size & $n=2(z_{1-\alpha/2}+z_{1-\beta})^2\sigma^2/\delta^2$ per arm\\
+IPW weights & $T/e(x)+(1-T)/(1-e(x))$\\
+DiD & $(\bar Y_{T,1}-\bar Y_{T,0})-(\bar Y_{C,1}-\bar Y_{C,0})$;\ $Y_{it}=\alpha_i+\gamma_t+\tau D_{it}+\varepsilon_{it}$\\
+\bottomrule
+\end{tabularx}
+\normalsize
+
+% ------------------------------------------------------------------ E
+\chapter{Glossary}
+\begin{description}[style=nextline,leftmargin=3.6cm,labelwidth=3.4cm,font=\sffamily\bfseries\small\color{navy},itemsep=1pt]
+\item[ABC--XYZ] Segmentation by value (ABC) and demand variability (XYZ) to set policies per class.
+\item[ADIDA / Croston] Forecasting methods for intermittent demand.
+\item[ATE] Average treatment effect, $\E[Y(1)-Y(0)]$.
+\item[Bullwhip effect] Amplification of order variability upstream in a supply chain.
+\item[Confounder] A variable affecting both treatment and outcome.
+\item[Conformal interval] Prediction interval from the empirical quantiles of past out-of-sample errors.
+\item[Critical ratio] $c_u/(c_u+c_o)$; the service level that maximises expected newsvendor profit.
+\item[CSL / fill rate] Probability of no stock-out per cycle / share of demand served from stock.
+\item[DES] Discrete-event simulation.
+\item[DiD] Difference-in-differences.
+\item[Erlang C] Probability that an arrival waits in an M/M/$c$ queue.
+\item[EVPI / VSS] Value of perfect information / value of the stochastic solution.
+\item[Event log] Table of case ID, activity and timestamp.
+\item[Grain] What one row of a table represents.
+\item[Leakage] Using information not available at prediction time.
+\item[MASE / WAPE] Scaled and weighted forecast-error metrics.
+\item[Phase I / II] Estimating control limits on in-control data / monitoring with them fixed.
+\item[Protection interval] Review period plus lead time.
+\item[Shadow price] Value of one more unit of a constrained resource.
+\item[SLA] Service-level agreement: a measurable promise about waiting.
+\item[SRM] Sample-ratio mismatch in an experiment.
+\item[Variant] A distinct sequence of activities in an event log.
+\end{description}
+
+% ------------------------------------------------------------------ F
+\chapter{Reading List}
+\paragraph{Core texts}
+\begin{enumerate}[nosep]
+\item Cachon, G. and Terwiesch, C. \emph{Matching Supply with Demand}. McGraw-Hill. Process, inventory and queueing intuition.
+\item Hillier, F.\,S. and Lieberman, G.\,J. \emph{Introduction to Operations Research}. McGraw-Hill.
+\item Hyndman, R.\,J. and Athanasopoulos, G. \emph{Forecasting: Principles and Practice}, 3rd ed. Free at \texttt{otexts.com/fpp3}.
+\item Silver, E.\,A., Pyke, D.\,F. and Thomas, D.\,J. \emph{Inventory and Production Management in Supply Chains}. CRC Press.
+\end{enumerate}
+\paragraph{Methods}
+\begin{enumerate}[nosep]
+\item Montgomery, D.\,C. \emph{Introduction to Statistical Quality Control}. Wiley.
+\item van der Aalst, W. \emph{Process Mining: Data Science in Action}. Springer.
+\item Law, A.\,M. \emph{Simulation Modeling and Analysis}. McGraw-Hill.
+\item Birge, J.\,R. and Louveaux, F. \emph{Introduction to Stochastic Programming}. Springer.
+\item Hern\'an, M. and Robins, J. \emph{Causal Inference: What If}. Free online.
+\item Huntington-Klein, N. \emph{The Effect}. Free at \texttt{theeffectbook.net}.
+\item Kohavi, R., Tang, D. and Xu, Y. \emph{Trustworthy Online Controlled Experiments}. Cambridge University Press.
+\end{enumerate}
+\paragraph{Articles cited in the notes}
+\begin{enumerate}[nosep]
+\item Lee, H.\,L., Padmanabhan, V. and Whang, S. (1997). The bullwhip effect in supply chains. \emph{Sloan Management Review} 38(3).
+\item Chen, F., Drezner, Z., Ryan, J.\,K. and Simchi-Levi, D. (2000). Quantifying the bullwhip effect. \emph{Management Science} 46(3).
+\item Fisher, M., Hammond, J., Obolensky, W. and Raman, A. (1994). Making supply meet demand in an uncertain world. \emph{Harvard Business Review} 72(3).
+\item Kohavi, R. and Thomke, S. (2017). The surprising power of online experiments. \emph{Harvard Business Review} 95(5).
+\item Makridakis, S., Spiliotis, E. and Assimakopoulos, V. (2022). M5 accuracy competition. \emph{International Journal of Forecasting} 38(4).
+\item Card, D. and Krueger, A.\,B. (1994). Minimum wages and employment. \emph{American Economic Review} 84(4).
+\item Lundberg, S. and Lee, S.-I. (2017). A unified approach to interpreting model predictions. \emph{NeurIPS}.
+\end{enumerate}
+
+% ------------------------------------------------------------------ G
+\chapter{Answers to Selected Exercises}
+\begin{description}[style=nextline,leftmargin=1.6cm,labelwidth=1.4cm,font=\sffamily\bfseries\color{navy},itemsep=3pt]
+\item[1.3] Performance $=0.72/(0.88\times0.97)=0.843$. Performance (84\%) is the weakest factor: investigate slow running
+and minor stops first.
+\item[2.2] $L=40\times0.9=36$ patients. To fit 30, $W\le30/40$\,h $=45$ minutes.
+\item[3.2] Errors $(2,-2,2,-4)$: MAE 2.5, WAPE $10/10=100\%$, bias $-2/10=-20\%$. MAPE is undefined (division by zero).
+\item[4.1] $Q^*=\sqrt{2\cdot11\,000\cdot15\,000/275}\approx1\,095$, $TC^*\approx301\,000$\xaf. At $Q=2\,000$ (holding on the
+discounted price) ordering + holding cost is about $352\,000$\xaf, i.e.\ $+51\,000$; the discount saves $0.02\times1\,100\times11\,000=242\,000$\xaf. Accept.
+\item[4.3] $\sigma_L=\sqrt{9\cdot36+40^2\cdot4}=82$; SS $=1.96\times82\approx161$ units. Lead-time variability (6\,400 of
+6\,724) dominates: negotiate reliable delivery before buying a better forecast.
+\item[4.4] $c_u=900$, $c_o=600$, CR $=0.6$, $z=0.253$, $Q^*=85.1$\,kg; expected leftovers $20[z\Phi(z)+\varphi(z)]\approx10.8$\,kg.
+If leftovers are discarded, $c_o=1\,500$, CR $=0.375$, $Q^*\approx73.6$\,kg.
+\item[6.1] $\rho=0.9$, $L_q=8.1$, $W_q=0.18$\,h $\approx10.8$ min. With 10\% more arrivals $\rho=0.99$ and $W_q\approx2$ hours.
+\item[6.3] Two M/M/1 at $\rho=0.8$: $W_q=4$ service times. M/M/2 with $a=1.6$: $C=0.711$, $W_q=0.711/(0.4\mu)\approx1.8$
+service times. One shared queue more than halves the wait.
+\item[7.2] $n=2(1.96+0.84)^2\cdot0.3\cdot0.7/0.02^2\approx8\,240$ members per arm.
+\item[7.4] $\chi^2=(240^2+240^2)/10\,000=11.5$, $p\approx0.0007$: a mismatch. Check assignment code, bot filtering and
+logging losses that differ between arms.
+\item[Q1] $\sigma_L=4\sqrt5=8.94$, SS $=14.7$; with sd 3, SS $=11.0$; saving $3.7\times500\approx1\,840$\xaf\ a year per item.
+\item[Q4] $W=120/30=4$ days; halving $W$ at the same throughput needs WIP of 60 cases.
+\end{description}
+
+\vspace{2cm}
+\begin{center}\sffamily\small\color{slate}
+Business Process Analytics --- Lecture notes, second edition\\
+Yaoundé Institute of Business Studies (YIBS) $\cdot$ MTech 2 Data Science and Artificial Intelligence\\
+Lecturer: FOLEFAC Martins $\cdot$ Tel.\ 673\,909\,069
+\end{center}
